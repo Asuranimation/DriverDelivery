@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class Driver : MonoBehaviour
 {
+    
     [SerializeField] float speedRotate;
     [SerializeField] float speedMove;
-    void Start()
-    {
-    }
-
+    [SerializeField] float slowSpeed;
+    [SerializeField] float boostSpeed = 7f;
+   
     void Update()
     {
-        MoveCapsule();
         RotateCapsule();
+        slowSpeed = 4f;
+    }
+
+    private void FixedUpdate()
+    {
+        MoveCapsule();
     }
 
     void RotateCapsule()
@@ -25,6 +30,17 @@ public class Driver : MonoBehaviour
     void MoveCapsule()
     {
         float move = Input.GetAxis("Vertical") * speedMove * Time.deltaTime;
-        transform.Translate(new Vector3 (0,move,0));
+        float backwardSpeedFactor = 0.5f;
+
+        if (move < 0) 
+        {
+            move *= speedMove * backwardSpeedFactor ;
+        }
+        else 
+        {
+            move *= speedMove ;
+        }
+
+        transform.Translate(new Vector3(0, move, 0));
     }
 }
